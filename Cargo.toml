@@ -1,0 +1,11 @@
+[package]
+name = "o-dam"
+version = "0.1.0"
+authors = ["Ryan Coleman <me@ryuhhnn.com>"]
+edition = "2018"
+
+[dependencies]
+juniper = "0.11"
+juniper_rocket = "0.2.0"
+
+rocket = "0.4.2"
