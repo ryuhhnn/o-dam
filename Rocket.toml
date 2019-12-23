@@ -1,0 +1,2 @@
+[development.databases.neo_store]
+url = "http://neo4j:password@localhost:7687"
