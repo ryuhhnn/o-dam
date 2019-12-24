@@ -4,6 +4,10 @@ version = "0.1.0"
 authors = ["Ryan Coleman <me@ryuhhnn.com>"]
 edition = "2018"
 
+[lib]
+path = "src/lib.rs"
+name = "odam"
+
 [dependencies]
 juniper = "0.11"
 juniper_rocket = "0.2.0"
