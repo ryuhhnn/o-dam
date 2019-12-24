@@ -59,15 +59,18 @@ graphql_object!(MutationRoot: Context | &self | {
   ) -> FieldResult<Collection> {
     let uuid = Uuid::new_v4();
     let statement = Statement::new(
-        "CREATE (c:Collection {uuid: {uuid}, name: {name}, description: {description}})"
-      );
-      // .with_param("uuid", uuid).unwrap()
-      // .with_param("name", name).unwrap()
-      // .with_param("description", description).unwrap();
-    let result = executor.context().connection.exec(statement)?;
+        "CREATE (c:Collection {uuid: {uuid}, name: {name}, description: {description}}) RETURN c.uuid, c.name, c.description"
+      )
+      .with_param("uuid", &uuid.to_hyphenated().to_string()).unwrap()
+      .with_param("name", &name).unwrap()
+      .with_param("description", &description).unwrap();
+    let query = executor.context().connection.exec(statement)?;
+    let result = query.rows().nth(0).unwrap();
 
-    result.rows();
+    let uuid = result.get("c.uuid")?;
+    let name = result.get("c.name")?;
+    let description = result.get("c.description")?;
 
-    Ok(Collection { uuid: String::from("asdf"), name: String::from("asdf"), description: Some(String::from("asdf"))})
+    Ok(Collection { uuid: uuid, name: name, description: Some(description)})
   }
 });
