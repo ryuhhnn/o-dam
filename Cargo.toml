@@ -8,6 +8,7 @@ edition = "2018"
 juniper = "0.11"
 juniper_rocket = "0.2.0"
 rocket = "0.4.2"
+uuid = { version = "0.8", features = ["v4"] }
 
 [dependencies.rocket_contrib]
 version = "0.4.2"
