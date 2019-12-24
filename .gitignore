@@ -11,3 +11,4 @@ Cargo.lock
 
 /neo4j/
 /.vscode/
+.DS_Store
