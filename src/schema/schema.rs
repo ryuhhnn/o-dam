@@ -64,7 +64,7 @@ graphql_object!(MutationRoot: Context | &self | {
       // .with_param("uuid", uuid).unwrap()
       // .with_param("name", name).unwrap()
       // .with_param("description", description).unwrap();
-    let result = executor.context().connection.exec(statement).unwrap();
+    let result = executor.context().connection.exec(statement)?;
 
     result.rows();
 
