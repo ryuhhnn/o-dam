@@ -1,3 +1,4 @@
+use crate::config::ConfigData;
 use crate::graphql::schema::{Context, MutationRoot, QueryRoot};
 use crate::neo::NeoStore;
 use juniper::RootNode;
@@ -13,6 +14,7 @@ pub fn graphiql() -> content::Html<String> {
 #[post("/graphql", data = "<request>")]
 pub fn post_graphql_handler(
   context: NeoStore,
+  config: ConfigData,
   request: juniper_rocket::GraphQLRequest,
   schema: State<Schema>,
 ) -> juniper_rocket::GraphQLResponse {
@@ -20,6 +22,7 @@ pub fn post_graphql_handler(
     &schema,
     &Context {
       connection: context,
+      config: config,
     },
   )
 }

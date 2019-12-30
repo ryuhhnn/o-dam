@@ -1,3 +1,4 @@
+use crate::config::ConfigData;
 use crate::model::collection::Collection;
 use crate::neo::NeoStore;
 use juniper::FieldResult;
@@ -6,6 +7,7 @@ use uuid::Uuid;
 
 pub struct Context {
   pub connection: NeoStore,
+  pub config: ConfigData,
 }
 
 impl juniper::Context for Context {}
