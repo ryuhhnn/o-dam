@@ -10,3 +10,4 @@ pub mod graphql;
 mod model;
 pub mod neo;
 pub mod routes;
+pub mod storage;
