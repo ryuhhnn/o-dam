@@ -5,7 +5,9 @@ extern crate juniper;
 #[macro_use]
 extern crate rocket_contrib;
 
+pub mod config;
 pub mod graphql;
 mod model;
 pub mod neo;
 pub mod routes;
+pub mod storage;

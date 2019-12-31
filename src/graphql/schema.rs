@@ -1,11 +1,14 @@
+use crate::config::ConfigData;
 use crate::model::collection::Collection;
 use crate::neo::NeoStore;
+use crate::storage::persist::Persist;
 use juniper::FieldResult;
 use rocket_contrib::databases::rusted_cypher::Statement;
 use uuid::Uuid;
 
 pub struct Context {
   pub connection: NeoStore,
+  pub config: ConfigData,
 }
 
 impl juniper::Context for Context {}
@@ -57,20 +60,26 @@ graphql_object!(MutationRoot: Context | &self | {
     name: String as "id of the collection",
     description: Option<String> as "description of the collection"
   ) -> FieldResult<Collection> {
-    let uuid = Uuid::new_v4();
+    let uuid = Uuid::new_v4().to_hyphenated().to_string();
+    let fs_adapter = executor.context().config.fs_adapter.as_str();
+    Persist::create_folder(fs_adapter, uuid.as_str())?;
+
     let statement = Statement::new(
         "CREATE (c:Collection {uuid: {uuid}, name: {name}, description: {description}}) RETURN c.uuid, c.name, c.description"
       )
-      .with_param("uuid", &uuid.to_hyphenated().to_string()).unwrap()
+      .with_param("uuid", &uuid).unwrap()
       .with_param("name", &name).unwrap()
       .with_param("description", &description).unwrap();
     let query = executor.context().connection.exec(statement)?;
     let result = query.rows().nth(0).unwrap();
 
-    let uuid = result.get("c.uuid")?;
-    let name = result.get("c.name")?;
-    let description = result.get("c.description")?;
+    let uuid: String = result.get("c.uuid")?;
+    let name: String = result.get("c.name")?;
+    let description = match result.get("c.description") {
+      Ok(description) => Some(description),
+      Err(_e) => None,
+    };
 
-    Ok(Collection { uuid: uuid, name: name, description: Some(description)})
+    Ok(Collection { uuid: uuid, name: name, description: description})
   }
 });
