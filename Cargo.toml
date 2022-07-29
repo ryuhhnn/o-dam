@@ -9,7 +9,7 @@ path = "src/lib.rs"
 name = "odam"
 
 [dependencies]
-juniper = "0.11"
+juniper = "0.15"
 juniper_rocket = "0.2.0"
 rocket = "0.4.2"
 uuid = { version = "0.8", features = ["v4"] }
